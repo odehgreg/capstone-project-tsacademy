@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: taskapp-api-rewrite
+  namespace: taskapp
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/$1
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.taskapp-james-greg.xyz
+      http:
+        paths:
+          - path: /(tasks|auth/.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 5000

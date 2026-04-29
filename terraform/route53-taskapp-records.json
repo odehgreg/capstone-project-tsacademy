@@ -1,0 +1,27 @@
+{
+  "Comment": "TaskApp DNS records",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "taskapp.taskapp-james-greg.xyz",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [
+          { "Value": "ac420a8c7b3db41fbbd63440a24ec60c-99ce63344bce6312.elb.eu-west-1.amazonaws.com" }
+        ]
+      }
+    },
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "api.taskapp-james-greg.xyz",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [
+          { "Value": "ac420a8c7b3db41fbbd63440a24ec60c-99ce63344bce6312.elb.eu-west-1.amazonaws.com" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: cluster.taskapp-james-greg.xyz
+spec:
+  api:
+    loadBalancer:
+      class: Network
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://novara-kops-state-414866527894/cluster.taskapp-james-greg.xyz
+  dnsZone: taskapp-james-greg.xyz
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-north-1a
+      name: a
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-north-1b
+      name: b
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-north-1c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-north-1a
+      name: a
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-north-1b
+      name: b
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-north-1c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubeProxy:
+    enabled: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  - ::/0
+  kubernetesVersion: 1.35.3
+  masterPublicName: api.cluster.taskapp-james-greg.xyz
+  networkCIDR: 10.0.0.0/16
+  networkID: vpc-0acc7351516215172
+  networking:
+    cilium:
+      enableNodePort: true
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  - ::/0
+  subnets:
+  - cidr: 10.0.11.0/24
+    id: subnet-0e34df16c8c6b6dcb
+    name: eu-north-1a
+    type: Private
+    zone: eu-north-1a
+  - cidr: 10.0.12.0/24
+    id: subnet-0c337c80b3fb7f61f
+    name: eu-north-1b
+    type: Private
+    zone: eu-north-1b
+  - cidr: 10.0.13.0/24
+    id: subnet-0303267fda9a740bf
+    name: eu-north-1c
+    type: Private
+    zone: eu-north-1c
+  - cidr: 10.0.1.0/24
+    id: subnet-06feec4e4855c8d20
+    name: utility-eu-north-1a
+    type: Utility
+    zone: eu-north-1a
+  - cidr: 10.0.2.0/24
+    id: subnet-0cef79831a41a79ed
+    name: utility-eu-north-1b
+    type: Utility
+    zone: eu-north-1b
+  - cidr: 10.0.3.0/24
+    id: subnet-0a342e5ec6d04fd7d
+    name: utility-eu-north-1c
+    type: Utility
+    zone: eu-north-1c
+  topology:
+    bastion:
+      bastionPublicName: bastion.cluster.taskapp-james-greg.xyz
+    dns:
+      type: Public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: control-plane-eu-north-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-north-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: control-plane-eu-north-1b
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-north-1b
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: control-plane-eu-north-1c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-north-1c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: nodes-eu-north-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Node
+  subnets:
+  - eu-north-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: nodes-eu-north-1b
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Node
+  subnets:
+  - eu-north-1b
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: nodes-eu-north-1c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Node
+  subnets:
+  - eu-north-1c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: bastions
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.micro
+  maxSize: 1
+  minSize: 1
+  role: Bastion
+  subnets:
+  - eu-north-1a
+  - eu-north-1b
+  - eu-north-1c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: SSHCredential
+metadata:
+  labels:
+    kops.k8s.io/cluster: cluster.taskapp-james-greg.xyz
+  name: admin
+spec:
+  publicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCf7lhgyfG0d57MoPRvz7RameRQeO4L1cacW76pRnxZ5RbeRwiQwMV8KB8imBVfvPUN0R6zrnFFmQLesBDF6AzplZv4OaKiX3kaGV4lAij4CTmG9WLfBqCqNkOOb6RLFoBhW+sOVuDNKrHbtty3JdA0nD0i2zc8vJMmiMRogoJkkKGY6oCSi6dptnj7sRcOTaTLZ5y73wAGs9RH2syOscPU/ImndsaC/wdjhUPwl4cj+362J14EuBWH4zPFc1/pIR9ibXVySaVrd622lkv3MBaWx+23/7envch9lVbWfLkLu3BWKuk/gKtz56gBPIuM9ENzGedXFRuZuT96dL7B8cupc1+2TYhgFmEw6k98VBzJbScGaUsJYMI9vcsGlLW1YebgtQayrOGCIGVrFXzzVRaFD28FaDET3xR1eMd7gjbBlhoDzhSGJg3Rh2EsyieYtO8VidwPKmQ14Rk/ZsJAwpUGUMwIjTz3HHDA2BuLnC0S4/imoF0YGI86C+0RJXmcpB+c4eKq3TtRrmEGnY6zzZdHsVvR6dJx+OsQ2WeWX7gmUAcKiCoPYdDLVox9Md6A2AIlKVyE0HtjhtF07WDzmwy8guh0R910MBLtcElkUg3rkz9Cn98IymiHiWru5UM958a2XihK2X8MUyGmMtLEmZRzLEfK1QyW60YIkNiLin/sNQ==
+    dev@DESKTOP-8BS7LMP
